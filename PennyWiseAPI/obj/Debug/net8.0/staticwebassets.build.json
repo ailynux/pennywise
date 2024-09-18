@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "0FfMCbSeY4w8rE2jcW3aaOUBlgtv9SkMfawTYgm3B0A=",
+  "Source": "PennyWiseAPI",
+  "BasePath": "_content/PennyWiseAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
