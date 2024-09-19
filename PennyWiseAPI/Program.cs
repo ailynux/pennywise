@@ -1,10 +1,35 @@
+using Microsoft.EntityFrameworkCore;
+using PennyWiseAPI.Data;  // Your namespace for DbContext
+using PennyWiseAPI.Models;  // Your namespace for models
+
 var builder = WebApplication.CreateBuilder(args);
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Retrieve the connection string from the environment variable (or appsettings.json if applicable)
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Print the connection string to the console (for debugging)
+Console.WriteLine($"Connection String: {connectionString}");
+
+// Register DbContext with SQL Server using Entity Framework Core
+builder.Services.AddDbContext<ExpenseContext>(options =>
+    options.UseSqlServer(connectionString));
+
+// Build the app
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -14,31 +39,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Enable CORS globally
+app.UseCors("AllowAllOrigins");
+
 app.UseHttpsRedirection();
 
-var summaries = new[]
+// Define your endpoints for the Expense Tracker
+app.MapPost("/expenses", (Expense expense, ExpenseContext db) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    db.Expenses.Add(expense);
+    db.SaveChanges();
+    return Results.Created($"/expenses/{expense.Id}", expense);
+}).WithName("CreateExpense");
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/expenses", (ExpenseContext db) =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+    return db.Expenses.ToList();
+}).WithName("GetExpenses");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

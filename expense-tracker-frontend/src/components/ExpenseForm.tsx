@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from './api';  // Use the centralized Axios instance
 
 const ExpenseForm = () => {
     const [expense, setExpense] = useState({
@@ -12,7 +12,8 @@ const ExpenseForm = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/expenses', expense);
+            // Use Axios instance with the base URL
+            await api.post('/api/expenses', expense);
             alert('Expense added successfully!');
         } catch (error) {
             console.error('There was an error adding the expense!', error);
