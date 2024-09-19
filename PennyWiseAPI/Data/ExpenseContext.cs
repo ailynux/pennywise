@@ -12,10 +12,18 @@ namespace PennyWiseAPI.Data
 
         public DbSet<Expense> Expenses { get; set; }
 
-        // Optionally, you can configure other model relationships or settings here
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Expense>().ToTable("Expenses");
+            modelBuilder.Entity<Expense>(entity =>
+            {
+                entity.ToTable("Expenses");
+
+                // Specify precision and scale for Amount
+                entity.Property(e => e.Amount)
+                      .HasColumnType("decimal(18,2)");
+
+                // Configure other properties if needed
+            });
         }
     }
 }

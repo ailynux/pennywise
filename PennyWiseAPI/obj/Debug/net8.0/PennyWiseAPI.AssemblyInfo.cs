@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("a49b3803-4ab2-416b-9aa7-6e8cebb731d2")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("PennyWiseAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6bbbdbe2c4abadbe1caa6c2ff571ab741995eead")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a4dc1f27496c227f6bcf9d9f8cb15568e51a202")]
 [assembly: System.Reflection.AssemblyProductAttribute("PennyWiseAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PennyWiseAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
